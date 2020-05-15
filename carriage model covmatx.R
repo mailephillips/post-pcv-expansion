@@ -99,22 +99,25 @@ post <- coda.samples(mod, thin=5, c('beta0.st', 'beta1.st', 'beta2.st',
 
 
 sum.post <- summary(post)
-View(sum.post$quantiles)
+# View(sum.post$quantiles)
+
+# write.csv(sum.post13$quantiles, "postquants.csv")
+# prevsamps <- as.data.frame(jpos13[[1]][,773:1157])
+# write.csv(prevsamps, "prevsamps.csv")
 
 #plot(post, col=c("blue", "purple", "green"))
 
 #########################################
 #MCMC Diagnostics
 #########################################
-test <- sort(effectiveSize(post))
+# test <- sort(effectiveSize(post))
 summary(effectiveSize(post)[which(effectiveSize(post)!=0)])   
-which(effectiveSize(post)==0)
 
-gew <- geweke.diag(post)[[1]][[1]] 
+# gew <- geweke.diag(post)[[1]][[1]] 
 hist(geweke.diag(post)[[1]][[1]])
 
-par(mfrow=c(3,2))
-autocorr.plot(as.mcmc(post[1]))
+# par(mfrow=c(3,2))
+# autocorr.plot(as.mcmc(post[1]))
 gelman <- (gelman.diag(post, multivariate = FALSE))
 
 #############################################################################################################
@@ -152,35 +155,12 @@ caterplot(post, parms = "beta2.st", labels = order.b2, style = c("plain"), quant
 title(expression(paste("Model Estimates of ", beta [2][i])))
 mtext(expression(bold('Log(Relative Risk Ratio per year)')), side = 1, line = 3)
 mtext(expression(bold('Serotype')), side =2, line = 3)
-#caterpoints(runif(5, 10, 20), pch="x", col="red")
-
-
-caterplot(post, parms = "exp.beta0.st", labels = order.b0, style = c("plain"), quantiles = list(inner=c(0.025,0.975)), bty="n", lwd = c(1,1), cex.labels = 1, col="grey40")
-title(expression(paste("Model Estimates of ", exp(beta [0][j]))))
-
-caterplot(post, parms = "exp.beta1.st", labels = order.b1, style = c("plain"), quantiles = list(inner=c(0.025,0.975)), bty="n", lwd = c(1,1), cex.labels = 1, col="grey40")
-title(expression(paste("Model Estimates of ", exp(beta [1][j]))))
-
-caterplot(post, parms = "exp.beta2.st", labels = order.b2, style = c("plain"), quantiles = list(inner=c(0.025,0.975)), bty="n", lwd = c(1,1), cex.labels = 1, col="grey40")
-title(expression(paste("Model Estimates of ", exp(beta [2][j]))))
-
-
-
-caterplot(post, parms = "prev.ratio.fin", labels = order.prevratio, style = c("plain"), quantiles = list(inner=c(0.025,0.975)), lwd = c(1,1), bty='n', cex.labels = 1, col="grey40")
-title(expression(paste("Model serotype prevalence ratios (", italic("time") [6] / italic("time") [0], ")")), adj=0)
-caterpoints(runif(55, 1, 1), type="l", lty=2, col="black", lwd=2)
-caterpoints(runif(55, 1.479, 1.479), type="l", lty=2, col="red", lwd=2)
-#caterpoints(runif(55, 1.364, 1.364), type="l", lty=2, col="green4", lwd=2)
-#caterplot(post, parms = "prev.ratio", labels = order.prevratio, style = c("plain"), quantiles = list(outer=c(0.025,0.975)), lwd = c(1,1), add=TRUE)
-legend(x="bottomright",legend=c('Prevalence ratio: 1','Nurhonen constant ratio: 1.48'),lwd=2, lty=2, col=c('black','red'),bty='n', cex=.6)
-#caterplot(jpos7, parms = c("beta1", "alpha0", "alpha1", 'alpha2', 'alpha3'),style = c("plain"))
 
 caterplot(post, parms = "log.prev.ratio.fin", labels = order.logprevratio, style = c("plain"), quantiles = list(inner=c(0.025,0.975)), lwd = c(1,1), bty='n', cex.labels = 1, col="grey40")
-#title(expression(paste("Figure 2. Model serotype log(prevalence ratios) (", italic("time") [6] / italic("time") [0], ")")), adj=0)
-title("Jewish children")
+title("Log(prevalence ratio) y6/y0")
 caterpoints(runif(55, 0, 0), type="l", lty=2, col="gray60", lwd=3)
 caterpoints(runif(55, log(1.479), log(1.479)), type="l", lty=4, col="black", lwd=3)
-#caterpoints(runif(55, log(1.153), log(1.153)), type="l", lty=2, col="green4", lwd=2)
 legend(x=.65, y=4.5,legend=c('log(prev. ratio): 0','Constant log(prev. ratio): 0.39'),lwd=2, lty=c(2,4), col=c('gray60','black'),bty = "n")
 mtext(expression(bold('Log(prevalence ratio) over study period')), side = 1, line = 3)
 mtext(expression(bold('Serotype')), side =2, line = 3)
+
